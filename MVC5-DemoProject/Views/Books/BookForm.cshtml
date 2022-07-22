@@ -1,0 +1,42 @@
+﻿@using  MVC5_DemoProject.ViewModels
+@model BookFormViewModel
+
+ 
+@{
+    ViewBag.Title = "Create";
+}
+
+<h3 class="text text-primary">@(Model.Id==0?"Add New Book":"Edit Book")Book</h3>
+
+<form action="/Books/Save" method="post">
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m=>m.Id)
+    <div class="form-group">
+
+        @Html.LabelFor(m => m.Title)
+        @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Title, null, new { @class = "text text-danger" })
+
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Author)
+        @Html.TextBoxFor(m => m.Author, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Author, null, new { @class = "text text-danger" })
+
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.CatId)
+        @Html.DropDownListFor(m => m.CatId, new SelectList(Model.Categories, "Id", "Name"), "", new {@class="form-control"})
+        @Html.ValidationMessageFor(m => m.Desciption, null, new { @class = "text text-danger" })
+
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Desciption)
+        @Html.TextAreaFor(m => m.Desciption, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Desciption, null, new { @class = "text text-danger" })
+
+    </div>
+
+    <input type="submit" value="submit" class="btn btn-primary" style="margin-top:10px;" />
+
+</form>

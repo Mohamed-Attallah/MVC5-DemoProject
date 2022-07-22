@@ -1,0 +1,18 @@
+﻿@using MVC5_DemoProject.Models;
+@model Book
+@{
+    ViewBag.Title = "Details";
+}
+
+<ul class="list-group">
+    <li class="list-group-item bg-secondary text-white fw-bold d-flex justify-content-between align-content-center ">
+        <span>@Model.Title</span>
+        <a href="/Books/Edit/@Model.Id" class="btn btn-primary"><i class="icofont-edit-alt"></i></a>
+    </li>
+    <li class="list-group-item">
+        @Model.Author
+    </li>
+    <li class="list-group-item">@Model.Category.Name</li>
+    <li class="list-group-item">@Model.Desciption</li>
+    <li class="list-group-item">@Model.AddedOn</li>
+</ul>

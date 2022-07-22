@@ -1,0 +1,105 @@
+﻿@using MVC5_DemoProject.Models;
+@model IEnumerable<MVC5_DemoProject.Models.Book>
+@{
+    ViewBag.Title = "Index";
+}
+<span id="msg"class="d-none"> @TempData["msg"]</span>
+<h2 class="text-primary">Books</h2>
+<a href="/Books/Create" class="btn btn-primary my-4">
+    <i class="icofont-plus"></i>
+    Add New
+</a>
+
+    <div class="alert alert-warning @(Model.Any()?"d-none":"" )">
+        No Books Has Been Added So Far
+    </div>
+
+    <table class="table @(Model.Any()?"":"d-none" )">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>AddedOn</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Book book in Model)
+            {
+                <tr>
+                    <td>@book.Title</td>
+                    <td>@book.Author</td>
+                    <td>@book.Category.Name</td>
+                    <td>@book.Desciption</td>
+                    <td>@book.AddedOn</td>
+                    <td><a href="/Books/Edit/@book.Id" class="btn btn-primary"><i class="icofont-edit-alt"></i>Edit</a></td>
+                    <td><a href="/Books/Details/@book.Id" class="btn btn-info"><i class="icofont-info-circle"></i>Details</a></td>
+                    <td><a href="#" class="btn btn-danger jsbtndelete" data-id="@book.Id"><i class="icofont-close"></i>Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+<link href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script>
+    $(document).ready(function () {
+       
+        var msg1 = document.getElementById("msg").innerText;
+        var toas = toastr;
+       
+        if (msg1.length > 1)
+        {
+            toas.clear();
+            toas.success(msg1);
+        }
+        
+        
+
+        $('.jsbtndelete').click(function (e) {
+            e.preventDefault();
+            var i = $(this);
+            e.preventDefault();
+            var conf = confirm("are you sure");
+            toas.clear();
+            if (conf) {
+                
+                //alert(i.data('id'));
+                $.ajax({
+                    url: "/Books/Delete/" + i.data('id'),
+                    success: function () {
+                        
+                       
+                       
+                        if ($("tbody tr").length == 1) {
+                            toas.success("Table is Empty");
+                            
+                            i.parents("tr").remove();
+                            $("table").fadeOut(function () {
+                                this.remove();
+                            });
+                            $(".alert").removeClass("d-none");
+                        }
+                        else {
+                            toas.success("you deleted this item");
+                            i.parents("tr").remove();
+                        }
+
+
+                    },
+                    error: function () {
+                       
+                        toas.error("Item not deleted");
+                    }
+                });
+            }
+            else {
+                
+                toas.error("not deleted");
+            }
+        });
+    });
+</script>
